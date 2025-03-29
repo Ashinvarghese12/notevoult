@@ -11,26 +11,19 @@ export default function Login({ setToken, setPage, setUserName }) {
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const login = async () => {
-    if (!email || !password) return toast.error('All fields are required', { delay: 2000 });
-    if (!validateEmail(email)) return toast.error('Enter a valid email', { delay: 2000 });
-  
+    if (!email || !password) return toast.error('All fields are required');
+    if (!validateEmail(email)) return toast.error('Enter a valid email');
+
     try {
       const res = await API.post('/auth/login', { email, password });
-  
-      if (res.data.token && res.data.user) {
-        localStorage.setItem('token', res.data.token);
-        setToken(res.data.token);
-        setUserName(res.data.user.name);
-        toast.success('Login Successful', { delay: 2000 });
-  
-        setEmail('');
-        setPassword('');
-      } else {
-        toast.error('Invalid response from server', { delay: 2000 });
-      }
+      localStorage.setItem('token', res.data.token);
+      setToken(res.data.token);
+      setUserName(user.name);
+      toast.success('Login Successful', { delay: 2000 });
+      setEmail('');
+      setPassword('');
     } catch (err) {
-      console.error('Login Error:', err.response?.data || err.message);
-      toast.error(err.response?.data?.message || 'Login failed. Please check your credentials.', { delay: 2000 });
+      toast.error('Login failed. Please check your credentials.', { delay: 2000 });
     }
   };
 
